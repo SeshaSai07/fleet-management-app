@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Fleet Management App</title>
+</head>
+<body>
+    <header>
+        <div class="title">Fleet Management App - Admin</div>
+        <div>
+            <span class = "small">Filters</span>
+        </div>   
+    </header>
+    
+    <main>
+        <aside class="sidebar">
+            <h3>Fleet Form</h3>
+            <form id = "fleetForm" onsubmit="return false;">
+                <label for = "regNo">Reg No of Vehicle</label>
+                <input id = "regNo" type="text" placeholder="Enter your number" required>
+
+                <label for = "category">Category </label>
+                <select id = "category" required>
+                    <option value = "">Select Category</option>
+                    <option value = "Auto">Auto</option>
+                    <option value = "Car">Car</option>
+                    <option value = "Truck">Truck</option>
+                    <option value = "Bus">Bus</option>
+                </select>
+
+                <label for = "driverName">Driver Name</label>
+                <input id = "driverName" type = "text" placeholder="Enter Driver Name" required>
+
+                <label for = "isAvaliable">Avaliablity</label>
+                <select id = "isAvaliable">
+                    <option value="Avaliable">Avaliable</option>
+                    <option value="Unavaliable">Unavaliable</option>
+                </select>
+
+                <button class="btn btn-primary" id = "addFleet">Add Fleet</button>
+            </form>
+
+            <p class="small" style="margin-top: 12px;">
+                Notes:
+                <ul style = "padding-left : 18px; margin-top:6px">
+                <li>Requuired feids must be filled</li>
+                <li>Form clears after adding</li>
+                <li>Driver update won't accept empty name</li>
+                </ul>
+            </p>
+        </aside>
+
+        <section class = "content">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for = "filterCategory" style="margin:0">Category</label>
+                        <select id = "filterCategory">
+                          <option value = "">Select Category</option>
+                            <option value = "Auto">Auto</option>
+                           <option value = "Car">Car</option>
+                            <option value = "Truck">Truck</option>
+                            <option value = "Bus">Bus</option>  
+                        </select>
+                    </div>
+                    <div class = "filter-group">
+                        <label for = "filterAvail" style="margin:0;">Avaliablity</label>
+                        <select id = "filterAvail">
+                            <option value="All">All</option>
+                            <option value="Avaliable">Avaliable</option>
+                            <option value="Unavaliable">Unavaliable</option>                           
+                        </select>
+                    </div>
+
+                    <button class="btn btn-ghost" id = "seedDemo"> Add Demo Vehicle</button>
+                    <button class="btn" id = "clearAll">Clear All Vehicles</button>
+                </div>
+            </div>
+
+            <div id = "grid" class="grid" aria-live="polite"></div>
+        </section>
+    </main>
+    
+</body>
+</html>
