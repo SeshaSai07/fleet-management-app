@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Fleet Management App</title>
 </head>
+<style>
+    body
+    {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        background-color: wheat;
+    }
+
+    header 
+    {
+        background: #fff;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        border: solid;
+    }
+</style>
 <body>
     <header>
         <div class="title">Fleet Management App - Admin</div>
@@ -81,6 +99,71 @@
             <div id = "grid" class="grid" aria-live="polite"></div>
         </section>
     </main>
-    
+
+    <script>
+        const STORAGE_KEY = 'mini_fleet_data';
+        const sampleImg = 'https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5e80fcb6-3f8e-480c-945b-30a5359eb40e/JNmYjkVr3WOjsrbu.png';
+        const $ = id => document.getElementById(id);
+        function loadData()
+        {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw === null || raw === undefined)
+            {
+                return [];
+            }
+            if (raw.trim() === "")
+            {
+                return [];
+            }
+            return JSON.parse(raw);
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } 
+
+        function renderGrid()
+        {
+            const grid = $('grid');
+            grid.innerHTML = '';
+            const data = loadData();
+            const catFilter =$('fliterCategory').value;
+            const availFilter = $('filterAvail').value;
+
+            const filtered = data.filter(item => {
+                let ok = true;
+                if (catFilter != 'All') ok = ok && (item.category ===  catFilter);
+                if (availFilter !== 'All') ok = ok && (item.avaliabilty === availFilter);
+                return ok;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style = "grid-column: 1/-1; text-align:center; color: #666">No Vehicles to show.</div>'
+                return;
+            }
+
+            filtered.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.id = v.id;
+
+                card.innerHTML = `
+                <img src = "${v.img || sampleImg}" alt = "vehicle image" />
+                <div class = "meta><b>Reg No: </b> ${excapeHtml(v.regNo)}</div>
+                <div class = "meta><b>Category: </b> ${excapeHtml(v.category)}</div>
+                <div class = "meta><b>Driver: </b> ${excapeHtml(v.driverName)}</div>
+                <div class = "meta><b>Status: </b> <span class = "pill ${v.avaliabilty === 'Avaliable' ? ' available'  : 'unavailable'} "> ${v.avaliabilty}</span></div>
+                <div  class = "card-actions">
+                    <button class = "btn btn-ghost btn-update">Update Driver </button>
+                     <button class = "btn btn-ghost btn-toggle">${v.avaliabilty === 'Avaliable' ? 'Make Unavailable' : 'Make Avaliable'} </button>
+                     <button class = "btn btn-ghost btn-delete">Delete Vehicle </button>
+                `;
+
+                card.querySelector('btn-update').addEventListener('click', () => updateDriver(v.id));
+                 card.querySelector('btn-toggle').addEventListener('click', () => toggleAvaliablity(v.id));
+                  card.querySelector('btn-delete').addEventListener('click', () => deleteVehicle(v.id));
+            });
+        }
+        </script>
 </body>
 </html>
